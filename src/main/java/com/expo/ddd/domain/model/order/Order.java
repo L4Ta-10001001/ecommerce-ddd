@@ -33,12 +33,31 @@ public class Order {
         this.items = new ArrayList<>();
     }
 
+    /**
+     * ✅ Factory method para reconstituir un agregado desde persistencia.
+     *    Separado del constructor público para dejar claro que no es creación nueva.
+     */
+    public static Order reconstitute(OrderId id, CustomerId customerId, OrderStatus status) {
+        Order order = new Order(id, customerId);
+        order.status = status;
+        return order;
+    }
+
     // ✅ Regla de negocio encapsulada: validación de stock + decremento + cálculo de total
     public void addItem(Product product, Quantity quantity) {
         if (!product.hasStock(quantity)) {
             throw new InsufficientStockException(product.getName());
         }
         product.decrementStock(quantity);
+        items.add(new OrderItem(product, quantity));
+        recalculateTotal();
+    }
+
+    /**
+     * ✅ Usado exclusivamente para reconstituir una Order desde persistencia.
+     *    No valida ni modifica el stock (ya fue modificado cuando se creó la orden original).
+     */
+    public void reconstitueItem(Product product, Quantity quantity) {
         items.add(new OrderItem(product, quantity));
         recalculateTotal();
     }
