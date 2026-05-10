@@ -13,7 +13,7 @@ const Header = () => {
           headers: AUTH_HEADERS,
         })
         setIsBackendOnline(response.ok || response.status === 404)
-      } catch (error) {
+      } catch {
         setIsBackendOnline(false)
       }
     }

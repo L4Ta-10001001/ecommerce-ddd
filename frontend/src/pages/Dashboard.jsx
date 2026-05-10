@@ -24,6 +24,7 @@ const Dashboard = () => {
     orderHistory,
     submitOrder,
     cancelExistingOrder,
+    backendOrderIdMap,
   } = useOrders()
 
   const handlePlaceOrder = async ({ productId, quantity, customerId, customerType }) => {
@@ -54,6 +55,7 @@ const Dashboard = () => {
 
   const normalizedHistory = orderHistory.map((order) => ({
     ...order,
+    backendOrderId: backendOrderIdMap.get(order.orderId),
     items: order.items?.map((item) => ({
       ...item,
       productName: item.productName ?? orderProductName(order),

@@ -4,7 +4,8 @@ export const AUTH_HEADERS = {
   Authorization: 'Basic dXNlcjp1c2VyMTIz',
 }
 
-export const DEFAULT_CUSTOMER_ID = '550e8400-e29b-41d4-a716-446655440000'
+export const DEFAULT_CUSTOMER_ID = '7e9d5c4a-8d5f-4c5d-9d5b-12b2a7f7a111'
+export const DEFAULT_BACKEND_ORDER_ID = 1
 
 export const CUSTOMER_TYPES = {
   REGULAR: 'REGULAR',
@@ -24,10 +25,14 @@ export const LABELS = {
   productsTitle: 'Products & Stock',
   orderHistoryTitle: 'Order History',
   orderFormTitle: 'Place Order',
+  orderFormCustomerSelect: 'Select Customer',
   orderFormProduct: 'Product',
   orderFormQuantity: 'Quantity',
   orderFormCustomerId: 'Customer ID',
   orderFormCustomerType: 'Customer Type',
+  orderFormCustomerRegular: 'Regular Customer',
+  orderFormCustomerVip: 'VIP Customer',
+  orderFormCustomerSelected: 'Selected',
   orderSubmit: 'Submit Order',
   orderSubmitting: 'Submitting...',
   orderConfirmedLabel: 'Order confirmed',
@@ -35,6 +40,7 @@ export const LABELS = {
   orderHistoryEmpty: 'No orders yet. Submit one to see it here.',
   orderHistorySession: 'session only',
   orderIdLabel: 'Order ID',
+  orderBackendIdLabel: 'DB ID',
   orderItemLabel: 'Item',
   orderTotalLabel: 'Total',
   orderCancel: 'Cancel',
@@ -57,4 +63,17 @@ export const SEED_PRODUCTS = [
   { id: 2, name: 'Mouse', price: 25.0, stock: 50, maxStock: 50 },
   { id: 3, name: 'Keyboard', price: 75.0, stock: 30, maxStock: 30 },
   { id: 4, name: 'Monitor', price: 350.0, stock: 5, maxStock: 5 },
+]
+
+export const CLIENT_ACCOUNTS = [
+  {
+    id: DEFAULT_CUSTOMER_ID,
+    name: 'Erik Herrera',
+    type: CUSTOMER_TYPES.REGULAR,
+  },
+  {
+    id: '2f1c62f8-6a12-4a2b-9b5b-0e7b1c14bb52',
+    name: 'Alex Chiluisa',
+    type: CUSTOMER_TYPES.VIP,
+  },
 ]

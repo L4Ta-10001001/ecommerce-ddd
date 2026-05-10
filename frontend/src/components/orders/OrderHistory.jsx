@@ -21,6 +21,8 @@ const OrderHistory = ({ orders, onCancel }) => {
               <div>
                 <p className="text-sm text-slate-300">{LABELS.orderIdLabel}</p>
                 <p className="text-sm font-semibold text-white">{order.orderId}</p>
+                <p className="mt-2 text-xs uppercase tracking-widest text-slate-500">{LABELS.orderBackendIdLabel}</p>
+                <p className="text-xs text-slate-300">{order.backendOrderId ?? LABELS.backendStatusUnknown}</p>
               </div>
 
               <div>
