@@ -1,5 +1,6 @@
 package com.expo.ddd.infrastructure.persistence.entity;
 
+import com.expo.ddd.domain.model.order.CustomerType;
 import com.expo.ddd.domain.model.order.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,6 +29,10 @@ public class OrderEntity {
 
     @Column(nullable = false)
     private UUID customerId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CustomerType customerType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

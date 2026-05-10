@@ -21,13 +21,15 @@ public class Order {
 
     private final OrderId id;
     private final CustomerId customerId;
+    private final CustomerType customerType;
     private OrderStatus status;
     private Money total;
     private final List<OrderItem> items;
 
-    public Order(OrderId id, CustomerId customerId) {
+    public Order(OrderId id, CustomerId customerId, CustomerType customerType) {
         this.id = id;
         this.customerId = customerId;
+        this.customerType = customerType;
         this.status = OrderStatus.PENDING;
         this.total = new Money(BigDecimal.ZERO);
         this.items = new ArrayList<>();
@@ -37,18 +39,22 @@ public class Order {
      * ✅ Factory method para reconstituir un agregado desde persistencia.
      *    Separado del constructor público para dejar claro que no es creación nueva.
      */
-    public static Order reconstitute(OrderId id, CustomerId customerId, OrderStatus status) {
-        Order order = new Order(id, customerId);
+    public static Order reconstitute(OrderId id, CustomerId customerId,
+                                     CustomerType customerType, OrderStatus status) {
+        Order order = new Order(id, customerId, customerType);
         order.status = status;
         return order;
     }
 
-    // ✅ Regla de negocio encapsulada: validación de stock + decremento + cálculo de total
+    // 🔧 ESCALABILIDAD: nueva regla agregada SOLO aquí.
+    // En el Proyecto A (N-Capas / modelo anémico) este cambio habría
+    // requerido modificar OrderService mezclando lógica de negocio
+    // con código de persistencia. Aquí solo cambia el agregado.
     public void addItem(Product product, Quantity quantity) {
-        if (!product.hasStock(quantity)) {
-            throw new InsufficientStockException(product.getName());
+        if (isRegularCustomer()) {
+            validateStock(product, quantity);
         }
-        product.decrementStock(quantity);
+        applyStockReduction(product, quantity);
         items.add(new OrderItem(product, quantity));
         recalculateTotal();
     }
@@ -81,6 +87,10 @@ public class Order {
         return customerId;
     }
 
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
+
     public OrderStatus getStatus() {
         return status;
     }
@@ -91,6 +101,24 @@ public class Order {
 
     public List<OrderItem> getItems() {
         return Collections.unmodifiableList(items);
+    }
+
+    private boolean isRegularCustomer() {
+        return this.customerType == CustomerType.REGULAR;
+    }
+
+    private void applyStockReduction(Product product, Quantity quantity) {
+        if (isRegularCustomer()) {
+            product.decrementStock(quantity);
+        } else {
+            product.reserveStockForVip(quantity);
+        }
+    }
+
+    private void validateStock(Product product, Quantity quantity) {
+        if (!product.hasStock(quantity)) {
+            throw new InsufficientStockException(product.getName());
+        }
     }
 
     private void recalculateTotal() {

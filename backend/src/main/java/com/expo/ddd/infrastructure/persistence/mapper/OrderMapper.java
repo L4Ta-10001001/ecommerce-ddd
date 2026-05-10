@@ -1,5 +1,6 @@
 package com.expo.ddd.infrastructure.persistence.mapper;
 
+import com.expo.ddd.domain.model.order.CustomerType;
 import com.expo.ddd.domain.model.order.Order;
 import com.expo.ddd.domain.model.order.OrderItem;
 import com.expo.ddd.domain.model.product.Product;
@@ -22,6 +23,7 @@ public class OrderMapper {
         Order order = Order.reconstitute(
                 OrderId.of(UUID.randomUUID()),
                 CustomerId.of(entity.getCustomerId()),
+                entity.getCustomerType(),
                 entity.getStatus()
         );
         reconstructItemsFromEntity(order, entity);
@@ -44,6 +46,7 @@ public class OrderMapper {
     private static OrderEntity buildOrderEntity(Order order) {
         OrderEntity entity = new OrderEntity();
         entity.setCustomerId(order.getCustomerId().getValue());
+        entity.setCustomerType(order.getCustomerType());
         entity.setStatus(order.getStatus());
         entity.setTotal(order.getTotal().getAmount());
         return entity;

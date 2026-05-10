@@ -15,28 +15,37 @@ public class Product {
     private final ProductId id;
     private final String name;
     private final Money unitPrice;
-    private Quantity stock;
+    // Stock interno como int para soportar deuda de reabastecimiento VIP (puede ser negativo)
+    private int stockLevel;
 
     public Product(ProductId id, String name, Money unitPrice, Quantity stock) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
-        this.stock = stock;
+        this.stockLevel = stock.getValue();
     }
 
     public boolean hasStock(Quantity requested) {
-        return !requested.isGreaterThan(stock);
+        return stockLevel >= requested.getValue();
     }
 
     public void decrementStock(Quantity amount) {
         if (!hasStock(amount)) {
             throw new InsufficientStockException(name);
         }
-        stock = stock.subtract(amount);
+        stockLevel -= amount.getValue();
+    }
+
+    /**
+     * ✅ Reserva stock para clientes VIP sin importar disponibilidad.
+     *    El stockLevel puede quedar negativo — representa deuda de reabastecimiento.
+     */
+    public void reserveStockForVip(Quantity amount) {
+        stockLevel -= amount.getValue();
     }
 
     public void restoreStock(Quantity amount) {
-        stock = stock.add(amount);
+        stockLevel += amount.getValue();
     }
 
     public ProductId getId() {
@@ -52,6 +61,10 @@ public class Product {
     }
 
     public Quantity getStock() {
-        return stock;
+        return Quantity.of(Math.max(1, stockLevel));
+    }
+
+    public int getStockLevel() {
+        return stockLevel;
     }
 }
