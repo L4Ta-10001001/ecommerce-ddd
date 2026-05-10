@@ -1,6 +1,7 @@
 package com.expo.ddd.domain;
 
 import com.expo.ddd.domain.exception.InsufficientStockException;
+import com.expo.ddd.domain.model.order.CustomerType;
 import com.expo.ddd.domain.model.order.Order;
 import com.expo.ddd.domain.model.order.OrderStatus;
 import com.expo.ddd.domain.model.product.Product;
@@ -41,7 +42,7 @@ class OrderDomainTest {
     @Test
     @DisplayName("shouldConfirmOrderWhenStockIsSufficient")
     void shouldConfirmOrderWhenStockIsSufficient() {
-        Order order = buildNewOrder();
+        Order order = buildRegularOrder();
 
         order.addItem(laptop, Quantity.of(2));
         order.confirm();
@@ -55,7 +56,7 @@ class OrderDomainTest {
     @Test
     @DisplayName("shouldThrowExceptionWhenStockIsInsufficient")
     void shouldThrowExceptionWhenStockIsInsufficient() {
-        Order order = buildNewOrder();
+        Order order = buildRegularOrder();
 
         InsufficientStockException exception = assertThrows(
                 InsufficientStockException.class,
@@ -69,7 +70,7 @@ class OrderDomainTest {
     @Test
     @DisplayName("shouldRestoreStockWhenOrderIsCancelled")
     void shouldRestoreStockWhenOrderIsCancelled() {
-        Order order = buildNewOrder();
+        Order order = buildRegularOrder();
         order.addItem(mouse, Quantity.of(3));
         order.confirm();
         assertEquals(47, mouse.getStock().getValue());
@@ -84,7 +85,7 @@ class OrderDomainTest {
     @Test
     @DisplayName("shouldThrowExceptionWhenCancellingAlreadyCancelledOrder")
     void shouldThrowExceptionWhenCancellingAlreadyCancelledOrder() {
-        Order order = buildNewOrder();
+        Order order = buildRegularOrder();
         order.addItem(mouse, Quantity.of(1));
         order.cancel();
 
@@ -117,10 +118,45 @@ class OrderDomainTest {
         );
     }
 
-    private Order buildNewOrder() {
+    // ✅ El dominio maneja la regla VIP sin tocar infraestructura
+    @Test
+    @DisplayName("shouldAllowVipOrderEvenWithInsufficientStock")
+    void shouldAllowVipOrderEvenWithInsufficientStock() {
+        Order vipOrder = buildVipOrder();
+
+        vipOrder.addItem(laptop, Quantity.of(99));
+        vipOrder.confirm();
+
+        assertEquals(OrderStatus.CONFIRMED, vipOrder.getStatus());
+        assertEquals(new BigDecimal("118800.00"), vipOrder.getTotal().getAmount());
+    }
+
+    // ✅ La regla original permanece intacta para clientes regulares
+    @Test
+    @DisplayName("shouldRejectRegularOrderWithInsufficientStock")
+    void shouldRejectRegularOrderWithInsufficientStock() {
+        Order regularOrder = buildRegularOrder();
+
+        assertThrows(
+                InsufficientStockException.class,
+                () -> regularOrder.addItem(laptop, Quantity.of(99)),
+                "Regular customer order must be rejected when stock is insufficient"
+        );
+    }
+
+    private Order buildRegularOrder() {
         return new Order(
                 OrderId.of(UUID.randomUUID()),
-                CustomerId.of(UUID.randomUUID())
+                CustomerId.of(UUID.randomUUID()),
+                CustomerType.REGULAR
+        );
+    }
+
+    private Order buildVipOrder() {
+        return new Order(
+                OrderId.of(UUID.randomUUID()),
+                CustomerId.of(UUID.randomUUID()),
+                CustomerType.VIP
         );
     }
 
