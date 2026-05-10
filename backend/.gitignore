@@ -1,0 +1,14 @@
+target/
+*.class
+*.log
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Agents (OpenCode skills — local only)
+.agents/
