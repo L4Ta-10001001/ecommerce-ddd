@@ -2,6 +2,28 @@ import { useState } from 'react'
 import { cancelOrder, placeOrder } from '../api/ordersApi'
 import { CUSTOMER_TYPES, DEFAULT_BACKEND_ORDER_ID, DEFAULT_CUSTOMER_ID, LABELS } from '../constants'
 
+const buildErrorMessage = (error) => {
+  const responseData = error?.response?.data
+
+  if (responseData?.error) {
+    return responseData.error
+  }
+
+  if (responseData?.message) {
+    return responseData.message
+  }
+
+  if (typeof responseData === 'string') {
+    return responseData
+  }
+
+  if (error?.message) {
+    return error.message
+  }
+
+  return LABELS.errorUnknown
+}
+
 const useOrders = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [lastOrder, setLastOrder] = useState(null)
@@ -45,10 +67,11 @@ const useOrders = () => {
       setOrderHistory((current) => [response, ...current])
       return { success: true, data: response }
     } catch (error) {
-      const errorMessage = error?.response?.data?.error || LABELS.errorUnknown
+      const errorMessage = buildErrorMessage(error)
       const errorPayload = { error: errorMessage }
+      const responseData = error?.response?.data
       setLastError(errorPayload)
-      setRawResponse(errorPayload)
+      setRawResponse(responseData ?? errorPayload)
       return { success: false, error: errorPayload }
     } finally {
       setIsSubmitting(false)
