@@ -2,6 +2,7 @@ package com.expo.ddd.application.usecase;
 
 import com.expo.ddd.application.command.OrderItemCommand;
 import com.expo.ddd.application.command.PlaceOrderCommand;
+import com.expo.ddd.domain.model.order.CustomerType;
 import com.expo.ddd.domain.model.order.Order;
 import com.expo.ddd.domain.model.product.Product;
 import com.expo.ddd.domain.repository.OrderRepository;
@@ -29,16 +30,17 @@ public class PlaceOrderUseCase {
     }
 
     public Order execute(PlaceOrderCommand command) {
-        Order order = createEmptyOrder(command.customerId());
+        Order order = createEmptyOrder(command.customerId(), command.customerType());
         addItemsToOrder(order, command);
         order.confirm();
         return orderRepository.save(order);
     }
 
-    private Order createEmptyOrder(UUID customerId) {
+    private Order createEmptyOrder(UUID customerId, CustomerType customerType) {
         return new Order(
                 OrderId.of(UUID.randomUUID()),
-                CustomerId.of(customerId)
+                CustomerId.of(customerId),
+                customerType
         );
     }
 
