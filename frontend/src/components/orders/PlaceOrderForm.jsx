@@ -1,7 +1,5 @@
 import { useMemo, useState } from 'react'
-import { CUSTOMER_TYPES, LABELS } from '../../constants'
-
-const DEFAULT_CUSTOMER_ID = '550e8400-e29b-41d4-a716-446655440000'
+import { CUSTOMER_TYPES, DEFAULT_CUSTOMER_ID, LABELS } from '../../constants'
 
 const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
   const [productId, setProductId] = useState(products[0]?.id ?? 1)
@@ -32,7 +30,7 @@ const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
       <h2 className="text-xl font-semibold text-white">{LABELS.orderFormTitle}</h2>
       <form className="mt-4 space-y-4" onSubmit={submitForm}>
         <label className="flex flex-col gap-2 text-sm text-slate-300">
-          Product
+          {LABELS.orderFormProduct}
           <select
             className="rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             value={productId}
@@ -47,7 +45,7 @@ const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
         </label>
 
         <label className="flex flex-col gap-2 text-sm text-slate-300">
-          Quantity
+          {LABELS.orderFormQuantity}
           <input
             type="number"
             min={1}
@@ -58,7 +56,7 @@ const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
         </label>
 
         <label className="flex flex-col gap-2 text-sm text-slate-300">
-          Customer ID
+          {LABELS.orderFormCustomerId}
           <input
             type="text"
             className="rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -68,7 +66,7 @@ const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
         </label>
 
         <label className="flex flex-col gap-2 text-sm text-slate-300">
-          Customer Type
+          {LABELS.orderFormCustomerType}
           <select
             className="rounded-xl border border-slate-600 bg-slate-900 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             value={customerType}
@@ -84,7 +82,7 @@ const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
           disabled={isSubmitting}
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isSubmitting ? 'Submitting...' : 'Submit Order'}
+          {isSubmitting ? LABELS.orderSubmitting : LABELS.orderSubmit}
         </button>
       </form>
     </section>

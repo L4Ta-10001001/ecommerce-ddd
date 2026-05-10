@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { cancelOrder, placeOrder } from '../api/ordersApi'
-import { CUSTOMER_TYPES } from '../constants'
-
-const DEFAULT_CUSTOMER_ID = '550e8400-e29b-41d4-a716-446655440000'
+import { CUSTOMER_TYPES, DEFAULT_CUSTOMER_ID, LABELS } from '../constants'
 
 const useOrders = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -40,7 +38,7 @@ const useOrders = () => {
       setOrderHistory((current) => [response, ...current])
       return { success: true, data: response }
     } catch (error) {
-      const errorMessage = error?.response?.data?.error || 'Unknown error'
+      const errorMessage = error?.response?.data?.error || LABELS.errorUnknown
       const errorPayload = { error: errorMessage }
       setLastError(errorPayload)
       setRawResponse(errorPayload)

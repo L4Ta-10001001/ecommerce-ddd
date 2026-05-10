@@ -5,7 +5,7 @@ const OrderResult = ({ order, error }) => {
   if (!order && !error) {
     return (
       <section className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 p-5 text-sm text-slate-400">
-        Submit an order to see the domain response.
+        {LABELS.orderResultEmpty}
       </section>
     )
   }
@@ -23,11 +23,11 @@ const OrderResult = ({ order, error }) => {
     <section className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 shadow-lg">
       <div className="flex items-center justify-between">
         <StatusBadge status={order.status} />
-        <span className="text-sm text-emerald-200">Order confirmed</span>
+        <span className="text-sm text-emerald-200">{LABELS.orderConfirmedLabel}</span>
       </div>
       <div className="mt-3 space-y-1 text-sm text-slate-200">
-        <p>Order ID: <span className="font-semibold text-white">{order.orderId}</span></p>
-        <p>Total: <span className="font-semibold text-white">${order.total.toFixed(2)}</span></p>
+        <p>{LABELS.orderIdLabel}: <span className="font-semibold text-white">{order.orderId}</span></p>
+        <p>{LABELS.orderTotalLabel}: <span className="font-semibold text-white">${order.total.toFixed(2)}</span></p>
       </div>
     </section>
   )

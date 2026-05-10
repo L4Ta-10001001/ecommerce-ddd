@@ -1,4 +1,5 @@
 import StockIndicator from './StockIndicator'
+import { LABELS } from '../../constants'
 
 const ProductCard = ({ product }) => {
   const formattedPrice = product.price.toLocaleString('en-US', {
@@ -16,8 +17,8 @@ const ProductCard = ({ product }) => {
       <div className="mt-4 space-y-2">
         <StockIndicator currentStock={product.stock} maxStock={product.maxStock} />
         <div className="flex items-center justify-between text-sm text-slate-300">
-          <span>{product.stock} units available</span>
-          <span className="text-xs uppercase tracking-widest text-slate-400">stock</span>
+          <span>{product.stock} {LABELS.orderUnitsAvailable}</span>
+          <span className="text-xs uppercase tracking-widest text-slate-400">{LABELS.orderStockLabel}</span>
         </div>
       </div>
     </article>

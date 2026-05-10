@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { API_BASE_URL, LABELS } from '../../constants'
+import { API_BASE_URL, AUTH_HEADERS, LABELS } from '../../constants'
 
 const STATUS_CHECK_INTERVAL = 5000
 
@@ -10,9 +10,7 @@ const Header = () => {
     const checkBackend = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/orders/1`, {
-          headers: {
-            Authorization: 'Basic dXNlcjp1c2VyMTIz',
-          },
+          headers: AUTH_HEADERS,
         })
         setIsBackendOnline(response.ok || response.status === 404)
       } catch (error) {
