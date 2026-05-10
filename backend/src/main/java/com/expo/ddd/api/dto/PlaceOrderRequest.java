@@ -5,6 +5,7 @@ import java.util.UUID;
 
 /**
  * DTO de entrada para colocar una nueva orden.
+ * El campo customerType acepta "REGULAR" o "VIP". Si se omite, se asume REGULAR.
  */
-public record PlaceOrderRequest(UUID customerId, List<OrderItemRequest> items) {
+public record PlaceOrderRequest(UUID customerId, String customerType, List<OrderItemRequest> items) {
 }

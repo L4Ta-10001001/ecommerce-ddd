@@ -7,6 +7,7 @@ import com.expo.ddd.application.command.PlaceOrderCommand;
 import com.expo.ddd.application.usecase.CancelOrderUseCase;
 import com.expo.ddd.application.usecase.PlaceOrderUseCase;
 import com.expo.ddd.domain.exception.OrderNotFoundException;
+import com.expo.ddd.domain.model.order.CustomerType;
 import com.expo.ddd.domain.model.order.Order;
 import com.expo.ddd.domain.repository.OrderRepository;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,14 @@ public class OrderController {
         List<OrderItemCommand> itemCommands = request.items().stream()
                 .map(item -> new OrderItemCommand(item.productId(), item.quantity()))
                 .toList();
-        return new PlaceOrderCommand(request.customerId(), itemCommands);
+        CustomerType customerType = resolveCustomerType(request.customerType());
+        return new PlaceOrderCommand(request.customerId(), customerType, itemCommands);
+    }
+
+    private CustomerType resolveCustomerType(String customerType) {
+        if (customerType == null || customerType.isBlank()) {
+            return CustomerType.REGULAR;
+        }
+        return CustomerType.valueOf(customerType.toUpperCase());
     }
 }
