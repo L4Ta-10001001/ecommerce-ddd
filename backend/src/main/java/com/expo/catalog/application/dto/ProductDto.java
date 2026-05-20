@@ -9,7 +9,8 @@ public record ProductDto(
         String description,
         BigDecimal price,
         String currency,
-        String status
+        String status,
+        Integer stock
 ) {
 
     public static ProductDto from(Product product) {
@@ -20,7 +21,8 @@ public record ProductDto(
                 product.getDescription().value(),
                 product.getPrice().amount(),
                 product.getPrice().currency().code(),
-                product.getStatus().name() 
+                product.getStatus().name(),
+                product.getStock().value()
         );
     }
 }

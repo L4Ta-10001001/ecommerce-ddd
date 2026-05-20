@@ -4,6 +4,8 @@ import com.expo.catalog.domain.model.product.Product;
 import com.expo.catalog.domain.model.product.ProductDescription;
 import com.expo.catalog.domain.model.product.ProductId;
 import com.expo.catalog.domain.model.product.ProductName;
+import com.expo.catalog.domain.model.product.ProductStatus;
+import com.expo.catalog.domain.model.product.Stock;
 import com.expo.catalog.domain.model.shared.Currency;
 import com.expo.catalog.domain.model.shared.Money;
 import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
@@ -16,15 +18,28 @@ import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJp
 public class ProductMapper {
 
     public Product toDomain(ProductJpaEntity entity) {
-        return new Product(
+        Product product = new Product(
                 new ProductId(entity.getId()),
                 new ProductName(entity.getName()),
                 new ProductDescription(entity.getDescription()),
                 new Money(
                         entity.getUnitPrice(),
                         new Currency(entity.getCurrency())
-                )
+                ),
+                new Stock(entity.getStock())
         );
+
+        // Restaurar estado persistido
+        if (entity.getStatus() != null &&
+                ProductStatus.valueOf(entity.getStatus()) == ProductStatus.INACTIVE) {
+            product.deactivate();
+            product.pullDomainEvents(); // limpiar evento generado al reconstruir
+        }
+
+        // Limpiar ProductCreated generado por el constructor
+        product.pullDomainEvents();
+
+        return product;
     }
 
     public ProductJpaEntity toEntity(Product product) {
@@ -37,6 +52,7 @@ public class ProductMapper {
         entity.setUnitPrice(product.getPrice().amount());
         entity.setCurrency(product.getPrice().currency().code());
         entity.setStatus(product.getStatus().name());
+        entity.setStock(product.getStock().value());
 
         return entity;
     }

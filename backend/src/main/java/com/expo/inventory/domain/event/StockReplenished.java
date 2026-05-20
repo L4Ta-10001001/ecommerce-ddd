@@ -1,5 +1,0 @@
-package com.expo.inventory.domain.event;
-
-public class StockReplenished {
-    
-}

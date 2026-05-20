@@ -31,18 +31,21 @@ public class Product {
     private ProductDescription description;
     private Money price;
     private ProductStatus status;
+    private Stock stock;
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
     public Product(
             ProductId id,
             ProductName name,
             ProductDescription description,
-            Money price
+            Money price,
+            Stock stock
     ) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.stock = stock;
         this.status = ProductStatus.ACTIVE;
 
         domainEvents.add(new ProductCreated(id.value().toString(), name.value()));
@@ -83,7 +86,19 @@ public class Product {
     }
 
     public boolean isAvailableForSale() {
-        return isActive();
+        return isActive() && stock.value() > 0;
+    }
+
+    public void reserveStock(int quantity) {
+        stock.reserve(quantity, status, id, domainEvents);
+    }
+
+    public void releaseStock(int quantity) {
+        stock.release(quantity, id, domainEvents);
+    }
+
+    public void replenishStock(int quantity) {
+        stock.replenish(quantity, id, domainEvents);
     }
 
     public List<DomainEvent> pullDomainEvents() {
@@ -97,5 +112,6 @@ public class Product {
     public ProductDescription getDescription() { return description; }
     public Money getPrice() { return price; }
     public ProductStatus getStatus() { return status; }
+    public Stock getStock(){ return stock; };
     
 }

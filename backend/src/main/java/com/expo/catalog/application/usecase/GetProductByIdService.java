@@ -20,14 +20,7 @@ public class GetProductByIdService implements GetProductByIdUseCase {
         Product product = productRepository.findById(ProductId.from(productId))
                 .orElseThrow(() -> new ProductNotFoundException(productId));
 
-        return new ProductDto(
-                product.getId().value().toString(),
-                product.getName().value(),
-                product.getDescription().value(),
-                product.getPrice().amount(),
-                product.getPrice().currency().code(),
-                product.getStatus().name()
-        );
+        return ProductDto.from(product);
     }
 }
 

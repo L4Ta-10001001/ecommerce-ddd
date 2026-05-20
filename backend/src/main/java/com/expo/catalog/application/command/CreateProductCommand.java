@@ -6,5 +6,6 @@ public record CreateProductCommand(
         String name,
         String description,
         BigDecimal price,
-        String currency
+        String currency,
+        Integer stock
 ) {}

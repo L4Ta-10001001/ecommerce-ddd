@@ -3,6 +3,7 @@ package com.expo.catalog.infrastructure.adapters.in;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,5 +64,20 @@ public class ProductController {
 
     public void changePrice(@RequestBody ChangeProductPriceCommand command) {
         changeProductPriceUseCase.changePrice(command);
+    }
+
+    @PutMapping("/{id}/price")
+    public void changePrice(
+            @PathVariable String id,
+            @RequestBody ChangeProductPriceCommand command
+    ) {
+        ChangeProductPriceCommand finalCommand =
+                new ChangeProductPriceCommand(
+                        id,
+                        command.amount(),
+                        command.currency()
+                );
+
+        changeProductPriceUseCase.changePrice(finalCommand);
     }
 }

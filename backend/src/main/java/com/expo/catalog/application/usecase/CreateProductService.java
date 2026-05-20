@@ -39,7 +39,8 @@ public class CreateProductService implements CreateProductUseCase {
                 command.name(),
                 command.description(),
                 command.price(),
-                command.currency()
+                command.currency(),
+                command.stock()
         );
 
         repository.save(product);
