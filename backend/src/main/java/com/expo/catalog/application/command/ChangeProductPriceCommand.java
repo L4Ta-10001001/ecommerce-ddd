@@ -1,5 +1,9 @@
 package com.expo.catalog.application.command;
 
-public class ChangeProductPriceCommand {
-    
-}
+import java.math.BigDecimal;
+
+public record ChangeProductPriceCommand(
+    String productId,
+    BigDecimal amount,
+    String currency
+) {}

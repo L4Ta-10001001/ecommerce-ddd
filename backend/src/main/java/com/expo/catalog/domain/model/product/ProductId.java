@@ -1,40 +1,24 @@
 package com.expo.catalog.domain.model.product;
 
-import java.util.Objects;
+import java.util.UUID;
 
 /**
  * ✅ Typed ID wrapper para Product. Usa Long porque el ID de producto viene de la BD semilla.
  */
-public final class ProductId {
 
-    private final Long value;
+public record ProductId(UUID value) {
 
-    private ProductId(Long value) {
-        this.value = Objects.requireNonNull(value, "ProductId cannot be null");
+    public ProductId {
+        if (value == null) {
+            throw new IllegalArgumentException("Product id cannot be null");
+        }
     }
 
-    public static ProductId of(Long value) {
-        return new ProductId(value);
-    }
+    public static ProductId from(String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Product id cannot be null or empty");
+        }
 
-    public Long getValue() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (!(other instanceof ProductId productId)) return false;
-        return Objects.equals(value, productId.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
-    }
-
-    @Override
-    public String toString() {
-        return value.toString();
+        return new ProductId(UUID.fromString(value));
     }
 }

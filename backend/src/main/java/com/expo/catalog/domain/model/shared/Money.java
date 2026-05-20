@@ -1,53 +1,75 @@
 package com.expo.catalog.domain.model.shared;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.math.RoundingMode;
+
+import com.expo.catalog.domain.exception.InvalidProductPriceException;
 
 /**
  * ✅ Value Object inmutable. Su identidad está definida por su valor, no por un ID.
  * ⚠️ En Proyecto A, el dinero sería un simple BigDecimal sin ninguna validación encapsulada.
  */
-public final class Money {
 
-    private final BigDecimal amount;
+public record Money(BigDecimal amount, Currency currency) {
 
-    public Money(BigDecimal amount) {
-        validateNonNegative(amount);
-        this.amount = amount;
-    }
+    private static final int SCALE = 2;
 
-    public static Money of(BigDecimal amount) {
-        return new Money(amount);
+    public Money {
+        validateAmount(amount);
+        validateCurrency(currency);
+        amount = normalize(amount);
     }
 
     public Money add(Money other) {
-        return new Money(this.amount.add(other.amount));
+        ensureSameCurrency(other);
+
+        return new Money(
+                this.amount.add(other.amount),
+                this.currency
+        );
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public Money subtract(Money other) {
+        ensureSameCurrency(other);
+
+        return new Money(
+                this.amount.subtract(other.amount),
+                this.currency
+        );
     }
 
-    private void validateNonNegative(BigDecimal amount) {
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Money amount cannot be negative");
+    private static void validateAmount(BigDecimal amount) {
+        if (amount == null) {
+            throw new IllegalArgumentException("Amount cannot be null");
+        }
+
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidProductPriceException();
+        }
+    }
+
+    private static void validateCurrency(Currency currency) {
+
+        if (currency == null) {
+            throw new IllegalArgumentException("Currency cannot be null");
+        }
+    }
+
+    /*Normaliza la cantidad de decimales del dinero. */
+    private static BigDecimal normalize(BigDecimal amount) {
+        return amount.setScale(SCALE, RoundingMode.HALF_UP);
+    }
+
+    private void ensureSameCurrency(Money other) {
+        if (!currency.equals(other.currency())) {
+            throw new IllegalArgumentException(
+                    "Cannot operate with different currencies"
+            );
         }
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (!(other instanceof Money money)) return false;
-        return amount.compareTo(money.amount) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(amount.stripTrailingZeros());
-    }
-
-    @Override
     public String toString() {
-        return "$" + amount;
+        return amount + " " + currency.code();
     }
 }

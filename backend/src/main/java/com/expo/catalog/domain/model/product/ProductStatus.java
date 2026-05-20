@@ -1,5 +1,6 @@
 package com.expo.catalog.domain.model.product;
 
-public class ProductStatus {
-    
+public enum ProductStatus {
+    ACTIVE,
+    INACTIVE
 }

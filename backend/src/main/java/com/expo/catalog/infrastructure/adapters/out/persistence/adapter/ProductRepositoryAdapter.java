@@ -2,8 +2,9 @@ package com.expo.catalog.infrastructure.adapters.out.persistence.adapter;
 
 import com.expo.catalog.domain.model.product.Product;
 import com.expo.catalog.domain.repository.ProductRepository;
-import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
+import com.expo.catalog.infrastructure.adapters.out.persistence.jpa.SpringDataProductRepository;
 import com.expo.catalog.infrastructure.mapper.ProductMapper;
+import com.expo.catalog.domain.model.product.ProductId;
 
 import java.util.Optional;
 
@@ -15,21 +16,30 @@ import java.util.Optional;
 public class ProductRepositoryAdapter implements ProductRepository {
 
     private final SpringDataProductRepository jpaRepository;
+    private final ProductMapper mapper;
 
-    public ProductRepositoryAdapter(SpringDataProductRepository jpaRepository) {
+    public ProductRepositoryAdapter(
+        SpringDataProductRepository jpaRepository,
+        ProductMapper mapper
+    ) {
         this.jpaRepository = jpaRepository;
+        this.mapper = mapper;
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
-        return jpaRepository.findById(id)
-                .map(ProductMapper::toDomain);
+    public void save(Product product) {
+        jpaRepository.save(mapper.toEntity(product));
     }
 
     @Override
-    public Product save(Product product) {
-        ProductJpaEntity entity = ProductMapper.toEntity(product);
-        ProductJpaEntity savedEntity = jpaRepository.save(entity);
-        return ProductMapper.toDomain(savedEntity);
+    public Optional<Product> findById(ProductId id) {
+        return jpaRepository.findById(id.value())
+                .map(mapper::toDomain);
     }
+
+    @Override
+    public boolean existsByName(String productName) {
+        return jpaRepository.existsByName(productName);
+    }
+
 }

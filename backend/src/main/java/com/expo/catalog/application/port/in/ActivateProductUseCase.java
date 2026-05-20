@@ -1,5 +1,5 @@
 package com.expo.catalog.application.port.in;
 
-public class ActivateProductUseCase {
-    
+public interface ActivateProductUseCase {
+    void activate(String productId);
 }

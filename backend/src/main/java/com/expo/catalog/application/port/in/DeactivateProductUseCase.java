@@ -1,5 +1,5 @@
 package com.expo.catalog.application.port.in;
 
-public class DeactivateProductUseCase {
-    
+public interface DeactivateProductUseCase {
+    void deactivate(String productId);
 }

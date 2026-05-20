@@ -1,5 +1,7 @@
 package com.expo.catalog.application.port.in;
 
-public class ChangeProductPriceUseCase {
-    
+import com.expo.catalog.application.command.ChangeProductPriceCommand;
+
+public interface ChangeProductPriceUseCase {
+    void changePrice(ChangeProductPriceCommand command);
 }

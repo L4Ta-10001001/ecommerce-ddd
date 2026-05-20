@@ -1,5 +1,24 @@
 package com.expo.catalog.domain.event;
 
-public class ProductActivated {
-    
+
+import java.time.LocalDateTime;
+
+public final class ProductActivated implements DomainEvent {
+
+    private final String productId;
+    private final LocalDateTime occurredOn;
+
+    public ProductActivated(String productId) {
+        this.productId = productId;
+        this.occurredOn = LocalDateTime.now();
+    }
+
+    @Override
+    public LocalDateTime occurredOn() {
+        return occurredOn;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
 }

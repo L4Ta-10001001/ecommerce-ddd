@@ -1,10 +1,12 @@
 package com.expo.catalog.infrastructure.mapper;
 
 import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.model.product.ProductDescription;
 import com.expo.catalog.domain.model.product.ProductId;
+import com.expo.catalog.domain.model.product.ProductName;
+import com.expo.catalog.domain.model.shared.Currency;
 import com.expo.catalog.domain.model.shared.Money;
 import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
-import com.expo.ordering.domain.model.shared.Quantity;
 
 /**
  * ✅ Mapper responsable de convertir entre el dominio y la infraestructura JPA.
@@ -13,27 +15,30 @@ import com.expo.ordering.domain.model.shared.Quantity;
  */
 public class ProductMapper {
 
-    public static Product toDomain(ProductJpaEntity entity) {
+    public Product toDomain(ProductJpaEntity entity) {
         return new Product(
-                ProductId.of(entity.getId()),
-                entity.getName(),
-                new Money(entity.getUnitPrice()),
-                new Quantity(entity.getStock())
+                new ProductId(entity.getId()),
+                new ProductName(entity.getName()),
+                new ProductDescription(entity.getDescription()),
+                new Money(
+                        entity.getUnitPrice(),
+                        new Currency(entity.getCurrency())
+                )
         );
     }
 
-    public static ProductJpaEntity toEntity(Product product) {
+    public ProductJpaEntity toEntity(Product product) {
+
         ProductJpaEntity entity = new ProductJpaEntity();
-        if (product.getId().getValue() != null) {
-            entity.setId(product.getId().getValue());
-        }
-        entity.setName(product.getName());
-        entity.setUnitPrice(product.getUnitPrice().getAmount());
-        entity.setStock(product.getStock().getValue());
+
+        entity.setId(product.getId().value());
+        entity.setName(product.getName().value());
+        entity.setDescription(product.getDescription().value());
+        entity.setUnitPrice(product.getPrice().amount());
+        entity.setCurrency(product.getPrice().currency().code());
+        entity.setStatus(product.getStatus().name());
+
         return entity;
     }
 
-    private ProductMapper() {
-        // Utility class — no instantiation
-    }
 }
