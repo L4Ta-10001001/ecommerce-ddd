@@ -1,10 +1,10 @@
-package com.expo.ddd.infrastructure.persistence.mapper;
+package com.expo.catalog.infrastructure.mapper;
 
-import com.expo.ddd.domain.model.product.Product;
-import com.expo.ddd.domain.valueobject.Money;
-import com.expo.ddd.domain.valueobject.ProductId;
-import com.expo.ddd.domain.valueobject.Quantity;
-import com.expo.ddd.infrastructure.persistence.entity.ProductEntity;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.model.product.ProductId;
+import com.expo.catalog.domain.model.shared.Money;
+import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
+import com.expo.ordering.domain.model.shared.Quantity;
 
 /**
  * ✅ Mapper responsable de convertir entre el dominio y la infraestructura JPA.
@@ -13,7 +13,7 @@ import com.expo.ddd.infrastructure.persistence.entity.ProductEntity;
  */
 public class ProductMapper {
 
-    public static Product toDomain(ProductEntity entity) {
+    public static Product toDomain(ProductJpaEntity entity) {
         return new Product(
                 ProductId.of(entity.getId()),
                 entity.getName(),
@@ -22,8 +22,8 @@ public class ProductMapper {
         );
     }
 
-    public static ProductEntity toEntity(Product product) {
-        ProductEntity entity = new ProductEntity();
+    public static ProductJpaEntity toEntity(Product product) {
+        ProductJpaEntity entity = new ProductJpaEntity();
         if (product.getId().getValue() != null) {
             entity.setId(product.getId().getValue());
         }

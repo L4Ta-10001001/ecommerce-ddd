@@ -1,10 +1,11 @@
-package com.expo.ddd.infrastructure.persistence.jpa;
+package com.expo.ordering.infrastructure.adapters.out.persistence.jpa;
 
-import com.expo.ddd.infrastructure.persistence.entity.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderJpaEntity;
 
 /**
  * 🔌 Repositorio Spring Data JPA para OrderEntity.
  */
-public interface OrderJpaRepository extends JpaRepository<OrderEntity, Long> {
+public interface SpringDataOrderRepository extends JpaRepository<OrderJpaEntity, Long> {
 }

@@ -1,8 +1,8 @@
-package com.expo.ddd.domain.model.order;
+package com.expo.ordering.domain.model.order;
 
-import com.expo.ddd.domain.model.product.Product;
-import com.expo.ddd.domain.valueobject.Money;
-import com.expo.ddd.domain.valueobject.Quantity;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.model.shared.Money;
+import com.expo.ordering.domain.model.shared.Quantity;
 
 /**
  * ✅ Entidad hija del agregado Order. Solo existe dentro del contexto de una Order.

@@ -1,4 +1,4 @@
-package com.expo.ddd.application.command;
+package com.expo.ordering.application.command;
 
 /**
  * ✅ Command object para un ítem dentro de una orden.

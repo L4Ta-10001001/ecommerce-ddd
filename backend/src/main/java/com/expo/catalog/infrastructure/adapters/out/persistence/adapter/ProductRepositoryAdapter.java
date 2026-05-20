@@ -1,10 +1,9 @@
-package com.expo.ddd.infrastructure.persistence.adapter;
+package com.expo.catalog.infrastructure.adapters.out.persistence.adapter;
 
-import com.expo.ddd.domain.model.product.Product;
-import com.expo.ddd.domain.repository.ProductRepository;
-import com.expo.ddd.infrastructure.persistence.entity.ProductEntity;
-import com.expo.ddd.infrastructure.persistence.jpa.ProductJpaRepository;
-import com.expo.ddd.infrastructure.persistence.mapper.ProductMapper;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.repository.ProductRepository;
+import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
+import com.expo.catalog.infrastructure.mapper.ProductMapper;
 
 import java.util.Optional;
 
@@ -15,9 +14,9 @@ import java.util.Optional;
  */
 public class ProductRepositoryAdapter implements ProductRepository {
 
-    private final ProductJpaRepository jpaRepository;
+    private final SpringDataProductRepository jpaRepository;
 
-    public ProductRepositoryAdapter(ProductJpaRepository jpaRepository) {
+    public ProductRepositoryAdapter(SpringDataProductRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
 
@@ -29,8 +28,8 @@ public class ProductRepositoryAdapter implements ProductRepository {
 
     @Override
     public Product save(Product product) {
-        ProductEntity entity = ProductMapper.toEntity(product);
-        ProductEntity savedEntity = jpaRepository.save(entity);
+        ProductJpaEntity entity = ProductMapper.toEntity(product);
+        ProductJpaEntity savedEntity = jpaRepository.save(entity);
         return ProductMapper.toDomain(savedEntity);
     }
 }

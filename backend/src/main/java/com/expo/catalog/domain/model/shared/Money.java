@@ -1,4 +1,4 @@
-package com.expo.ddd.domain.valueobject;
+package com.expo.catalog.domain.model.shared;
 
 import java.math.BigDecimal;
 import java.util.Objects;

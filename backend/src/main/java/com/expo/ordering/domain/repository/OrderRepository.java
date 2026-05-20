@@ -1,8 +1,8 @@
-package com.expo.ddd.domain.repository;
-
-import com.expo.ddd.domain.model.order.Order;
+package com.expo.ordering.domain.repository;
 
 import java.util.Optional;
+
+import com.expo.ordering.domain.model.order.Order;
 
 /**
  * 🔌 Puerto de salida del dominio. El dominio define la interfaz;

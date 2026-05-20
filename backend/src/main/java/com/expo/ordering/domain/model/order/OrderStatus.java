@@ -1,4 +1,4 @@
-package com.expo.ddd.domain.model.order;
+package com.expo.ordering.domain.model.order;
 
 /**
  * ✅ Enum de dominio que representa el ciclo de vida de una orden.

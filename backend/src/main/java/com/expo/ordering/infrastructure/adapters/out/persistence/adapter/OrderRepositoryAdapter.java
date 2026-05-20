@@ -1,10 +1,10 @@
-package com.expo.ddd.infrastructure.persistence.adapter;
+package com.expo.ordering.infrastructure.adapters.out.persistence.adapter;
 
-import com.expo.ddd.domain.model.order.Order;
-import com.expo.ddd.domain.repository.OrderRepository;
-import com.expo.ddd.infrastructure.persistence.entity.OrderEntity;
-import com.expo.ddd.infrastructure.persistence.jpa.OrderJpaRepository;
-import com.expo.ddd.infrastructure.persistence.mapper.OrderMapper;
+import com.expo.ordering.domain.model.order.Order;
+import com.expo.ordering.domain.repository.OrderRepository;
+import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderJpaEntity;
+import com.expo.ordering.infrastructure.adapters.out.persistence.jpa.SpringDataOrderRepository;
+import com.expo.ordering.infrastructure.mapper.OrderMapper;
 
 import java.util.Optional;
 
@@ -14,16 +14,16 @@ import java.util.Optional;
  */
 public class OrderRepositoryAdapter implements OrderRepository {
 
-    private final OrderJpaRepository jpaRepository;
+    private final SpringDataOrderRepository jpaRepository;
 
-    public OrderRepositoryAdapter(OrderJpaRepository jpaRepository) {
+    public OrderRepositoryAdapter(SpringDataOrderRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
 
     @Override
     public Order save(Order order) {
-        OrderEntity entity = OrderMapper.toEntity(order);
-        OrderEntity savedEntity = jpaRepository.save(entity);
+        OrderJpaEntity entity = OrderMapper.toEntity(order);
+        OrderJpaEntity savedEntity = jpaRepository.save(entity);
         return OrderMapper.toDomain(savedEntity);
     }
 

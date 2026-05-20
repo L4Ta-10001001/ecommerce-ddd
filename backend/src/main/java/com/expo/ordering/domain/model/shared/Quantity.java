@@ -1,7 +1,9 @@
-package com.expo.ddd.domain.valueobject;
+package com.expo.ordering.domain.model.shared;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import com.expo.catalog.domain.model.shared.Money;
 
 /**
  * ✅ Value Object que garantiza que una cantidad siempre sea positiva.

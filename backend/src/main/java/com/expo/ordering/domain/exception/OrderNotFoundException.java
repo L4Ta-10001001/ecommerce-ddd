@@ -1,4 +1,4 @@
-package com.expo.ddd.domain.exception;
+package com.expo.ordering.domain.exception;
 
 /**
  * ✅ Excepción de dominio para cuando un pedido no existe.

@@ -1,4 +1,4 @@
-package com.expo.ddd.api.dto;
+package com.expo.ordering.infrastructure.adapters.in.api.request;
 
 import java.util.List;
 import java.util.UUID;

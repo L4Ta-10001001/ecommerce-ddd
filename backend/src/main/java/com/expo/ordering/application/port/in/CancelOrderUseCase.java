@@ -1,10 +1,10 @@
-package com.expo.ddd.application.usecase;
+package com.expo.ordering.application.port.in;
 
-import com.expo.ddd.domain.exception.OrderNotFoundException;
-import com.expo.ddd.domain.model.order.Order;
-import com.expo.ddd.domain.model.product.Product;
-import com.expo.ddd.domain.repository.OrderRepository;
-import com.expo.ddd.domain.repository.ProductRepository;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.repository.ProductRepository;
+import com.expo.ordering.domain.exception.OrderNotFoundException;
+import com.expo.ordering.domain.model.order.Order;
+import com.expo.ordering.domain.repository.OrderRepository;
 
 /**
  * ✅ Caso de uso de cancelación: delega la lógica de restauración de stock al agregado Order.

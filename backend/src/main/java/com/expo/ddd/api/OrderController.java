@@ -1,15 +1,16 @@
 package com.expo.ddd.api;
 
-import com.expo.ddd.api.dto.OrderResponse;
-import com.expo.ddd.api.dto.PlaceOrderRequest;
-import com.expo.ddd.application.command.OrderItemCommand;
-import com.expo.ddd.application.command.PlaceOrderCommand;
-import com.expo.ddd.application.usecase.CancelOrderUseCase;
-import com.expo.ddd.application.usecase.PlaceOrderUseCase;
-import com.expo.ddd.domain.exception.OrderNotFoundException;
-import com.expo.ddd.domain.model.order.CustomerType;
-import com.expo.ddd.domain.model.order.Order;
-import com.expo.ddd.domain.repository.OrderRepository;
+import com.expo.ordering.application.command.OrderItemCommand;
+import com.expo.ordering.application.command.PlaceOrderCommand;
+import com.expo.ordering.application.port.in.CancelOrderUseCase;
+import com.expo.ordering.application.port.in.PlaceOrderUseCase;
+import com.expo.ordering.domain.exception.OrderNotFoundException;
+import com.expo.ordering.domain.model.order.Order;
+import com.expo.ordering.domain.repository.OrderRepository;
+import com.expo.ordering.domain.valueObject.CustomerType;
+import com.expo.ordering.infrastructure.adapters.in.api.request.PlaceOrderRequest;
+import com.expo.ordering.infrastructure.adapters.in.api.response.OrderResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

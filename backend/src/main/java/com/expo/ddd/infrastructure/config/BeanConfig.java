@@ -1,13 +1,14 @@
 package com.expo.ddd.infrastructure.config;
 
-import com.expo.ddd.application.usecase.CancelOrderUseCase;
-import com.expo.ddd.application.usecase.PlaceOrderUseCase;
-import com.expo.ddd.domain.repository.OrderRepository;
-import com.expo.ddd.domain.repository.ProductRepository;
-import com.expo.ddd.infrastructure.persistence.adapter.OrderRepositoryAdapter;
-import com.expo.ddd.infrastructure.persistence.adapter.ProductRepositoryAdapter;
-import com.expo.ddd.infrastructure.persistence.jpa.OrderJpaRepository;
-import com.expo.ddd.infrastructure.persistence.jpa.ProductJpaRepository;
+import com.expo.catalog.domain.repository.ProductRepository;
+import com.expo.catalog.infrastructure.adapters.out.persistence.adapter.ProductRepositoryAdapter;
+import com.expo.catalog.infrastructure.adapters.out.persistence.jpa.SpringDataProductRepository;
+import com.expo.ordering.application.port.in.CancelOrderUseCase;
+import com.expo.ordering.application.port.in.PlaceOrderUseCase;
+import com.expo.ordering.domain.repository.OrderRepository;
+import com.expo.ordering.infrastructure.adapters.out.persistence.adapter.OrderRepositoryAdapter;
+import com.expo.ordering.infrastructure.adapters.out.persistence.jpa.SpringDataOrderRepository;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,12 +21,12 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfig {
 
     @Bean
-    public ProductRepository productRepository(ProductJpaRepository jpaRepository) {
+    public ProductRepository productRepository(SpringDataProductRepository jpaRepository) {
         return new ProductRepositoryAdapter(jpaRepository);
     }
 
     @Bean
-    public OrderRepository orderRepository(OrderJpaRepository jpaRepository) {
+    public OrderRepository orderRepository(SpringDataOrderRepository jpaRepository) {
         return new OrderRepositoryAdapter(jpaRepository);
     }
 

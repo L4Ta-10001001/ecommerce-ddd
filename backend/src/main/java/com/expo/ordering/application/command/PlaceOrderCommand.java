@@ -1,6 +1,6 @@
-package com.expo.ddd.application.command;
+package com.expo.ordering.application.command;
 
-import com.expo.ddd.domain.model.order.CustomerType;
+import com.expo.ordering.domain.valueObject.CustomerType;
 
 import java.util.List;
 import java.util.UUID;

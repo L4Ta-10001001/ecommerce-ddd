@@ -1,11 +1,11 @@
-package com.expo.ddd.api.dto;
-
-import com.expo.ddd.domain.model.order.Order;
-import com.expo.ddd.domain.model.order.OrderItem;
-import com.expo.ddd.domain.model.order.OrderStatus;
+package com.expo.ordering.infrastructure.adapters.in.api.response;
 
 import java.math.BigDecimal;
 import java.util.List;
+
+import com.expo.ordering.domain.model.order.Order;
+import com.expo.ordering.domain.model.order.OrderItem;
+import com.expo.ordering.domain.model.order.OrderStatus;
 
 /**
  * DTO de salida para representar una orden al cliente HTTP.

@@ -1,7 +1,8 @@
 package com.expo.ddd.infrastructure.config;
 
-import com.expo.ddd.infrastructure.persistence.entity.ProductEntity;
-import com.expo.ddd.infrastructure.persistence.jpa.ProductJpaRepository;
+import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
+import com.expo.catalog.infrastructure.adapters.out.persistence.jpa.SpringDataProductRepository;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +17,12 @@ import java.math.BigDecimal;
 public class DataSeeder {
 
     @Bean
-    public CommandLineRunner seedProducts(ProductJpaRepository productJpaRepository) {
+    public CommandLineRunner seedProducts(SpringDataProductRepository productJpaRepository) {
         return args -> {
-            productJpaRepository.save(new ProductEntity("Laptop", new BigDecimal("1200.00"), 10));
-            productJpaRepository.save(new ProductEntity("Mouse", new BigDecimal("25.00"), 50));
-            productJpaRepository.save(new ProductEntity("Keyboard", new BigDecimal("75.00"), 30));
-            productJpaRepository.save(new ProductEntity("Monitor", new BigDecimal("350.00"), 5));
+            productJpaRepository.save(new ProductJpaEntity("Laptop", new BigDecimal("1200.00"), 10));
+            productJpaRepository.save(new ProductJpaEntity("Mouse", new BigDecimal("25.00"), 50));
+            productJpaRepository.save(new ProductJpaEntity("Keyboard", new BigDecimal("75.00"), 30));
+            productJpaRepository.save(new ProductJpaEntity("Monitor", new BigDecimal("350.00"), 5));
         };
     }
 }

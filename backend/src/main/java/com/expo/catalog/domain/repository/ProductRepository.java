@@ -1,8 +1,8 @@
-package com.expo.ddd.domain.repository;
-
-import com.expo.ddd.domain.model.product.Product;
+package com.expo.catalog.domain.repository;
 
 import java.util.Optional;
+
+import com.expo.catalog.domain.model.product.Product;
 
 /**
  * 🔌 Puerto de salida para la recuperación de productos.

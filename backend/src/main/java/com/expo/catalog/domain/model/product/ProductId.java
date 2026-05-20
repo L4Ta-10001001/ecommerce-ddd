@@ -1,4 +1,4 @@
-package com.expo.ddd.domain.valueobject;
+package com.expo.catalog.domain.model.product;
 
 import java.util.Objects;
 

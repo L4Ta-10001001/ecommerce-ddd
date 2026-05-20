@@ -1,9 +1,8 @@
-package com.expo.ddd.domain.model.product;
+package com.expo.catalog.domain.model.product;
 
-import com.expo.ddd.domain.exception.InsufficientStockException;
-import com.expo.ddd.domain.valueobject.Money;
-import com.expo.ddd.domain.valueobject.ProductId;
-import com.expo.ddd.domain.valueobject.Quantity;
+import com.expo.catalog.domain.model.shared.Money;
+import com.expo.ordering.domain.exception.InsufficientStockException;
+import com.expo.ordering.domain.model.shared.Quantity;
 
 /**
  * ✅ Aggregate Root del producto. Encapsula las reglas de stock.

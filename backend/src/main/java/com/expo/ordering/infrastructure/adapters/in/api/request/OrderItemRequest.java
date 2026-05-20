@@ -1,4 +1,4 @@
-package com.expo.ddd.api.dto;
+package com.expo.ordering.infrastructure.adapters.in.api.request;
 
 /**
  * DTO para un ítem de orden en la solicitud HTTP.

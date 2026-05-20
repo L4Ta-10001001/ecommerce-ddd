@@ -1,4 +1,4 @@
-package com.expo.ddd.domain.valueobject;
+package com.expo.ordering.domain.valueObject;
 
 import java.util.Objects;
 import java.util.UUID;

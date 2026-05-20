@@ -1,15 +1,15 @@
-package com.expo.ddd.application.usecase;
+package com.expo.ordering.application.port.in;
 
-import com.expo.ddd.application.command.OrderItemCommand;
-import com.expo.ddd.application.command.PlaceOrderCommand;
-import com.expo.ddd.domain.model.order.CustomerType;
-import com.expo.ddd.domain.model.order.Order;
-import com.expo.ddd.domain.model.product.Product;
-import com.expo.ddd.domain.repository.OrderRepository;
-import com.expo.ddd.domain.repository.ProductRepository;
-import com.expo.ddd.domain.valueobject.CustomerId;
-import com.expo.ddd.domain.valueobject.OrderId;
-import com.expo.ddd.domain.valueobject.Quantity;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.repository.ProductRepository;
+import com.expo.ordering.application.command.OrderItemCommand;
+import com.expo.ordering.application.command.PlaceOrderCommand;
+import com.expo.ordering.domain.model.order.Order;
+import com.expo.ordering.domain.model.order.OrderId;
+import com.expo.ordering.domain.model.shared.Quantity;
+import com.expo.ordering.domain.repository.OrderRepository;
+import com.expo.ordering.domain.valueObject.CustomerId;
+import com.expo.ordering.domain.valueObject.CustomerType;
 
 import java.util.UUID;
 

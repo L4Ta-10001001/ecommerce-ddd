@@ -1,11 +1,17 @@
 package com.expo.ddd.domain;
 
-import com.expo.ddd.domain.exception.InsufficientStockException;
-import com.expo.ddd.domain.model.order.CustomerType;
-import com.expo.ddd.domain.model.order.Order;
-import com.expo.ddd.domain.model.order.OrderStatus;
-import com.expo.ddd.domain.model.product.Product;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.model.product.ProductId;
+import com.expo.catalog.domain.model.shared.Money;
 import com.expo.ddd.domain.valueobject.*;
+import com.expo.ordering.domain.exception.InsufficientStockException;
+import com.expo.ordering.domain.model.order.Order;
+import com.expo.ordering.domain.model.order.OrderId;
+import com.expo.ordering.domain.model.order.OrderStatus;
+import com.expo.ordering.domain.model.shared.Quantity;
+import com.expo.ordering.domain.valueObject.CustomerId;
+import com.expo.ordering.domain.valueObject.CustomerType;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

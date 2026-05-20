@@ -1,4 +1,4 @@
-package com.expo.ddd.infrastructure.persistence.entity;
+package com.expo.catalog.infrastructure.adapters.out.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProductEntity {
+public class ProductJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class ProductEntity {
     @Column(nullable = false)
     private int stock;
 
-    public ProductEntity(String name, BigDecimal unitPrice, int stock) {
+    public ProductJpaEntity(String name, BigDecimal unitPrice, int stock) {
         this.name = name;
         this.unitPrice = unitPrice;
         this.stock = stock;

@@ -1,4 +1,4 @@
-package com.expo.ddd.domain.exception;
+package com.expo.ordering.domain.exception;
 
 /**
  * ✅ Excepción de dominio: el lenguaje ubiquo del negocio expresado como código.

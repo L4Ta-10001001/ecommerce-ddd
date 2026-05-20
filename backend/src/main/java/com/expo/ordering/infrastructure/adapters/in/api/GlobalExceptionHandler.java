@@ -1,7 +1,8 @@
-package com.expo.ddd.api;
+package com.expo.ordering.infrastructure.adapters.in.api;
 
-import com.expo.ddd.domain.exception.InsufficientStockException;
-import com.expo.ddd.domain.exception.OrderNotFoundException;
+import com.expo.ordering.domain.exception.InsufficientStockException;
+import com.expo.ordering.domain.exception.OrderNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

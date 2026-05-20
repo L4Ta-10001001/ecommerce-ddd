@@ -1,11 +1,11 @@
-package com.expo.ddd.domain.model.order;
+package com.expo.ordering.domain.model.order;
 
-import com.expo.ddd.domain.exception.InsufficientStockException;
-import com.expo.ddd.domain.model.product.Product;
-import com.expo.ddd.domain.valueobject.CustomerId;
-import com.expo.ddd.domain.valueobject.Money;
-import com.expo.ddd.domain.valueobject.OrderId;
-import com.expo.ddd.domain.valueobject.Quantity;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.domain.model.shared.Money;
+import com.expo.ordering.domain.exception.InsufficientStockException;
+import com.expo.ordering.domain.model.shared.Quantity;
+import com.expo.ordering.domain.valueObject.CustomerId;
+import com.expo.ordering.domain.valueObject.CustomerType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

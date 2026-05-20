@@ -1,7 +1,8 @@
-package com.expo.ddd.infrastructure.persistence.entity;
+package com.expo.ordering.infrastructure.adapters.out.persistence.entity;
 
-import com.expo.ddd.domain.model.order.CustomerType;
-import com.expo.ddd.domain.model.order.OrderStatus;
+import com.expo.ordering.domain.model.order.OrderStatus;
+import com.expo.ordering.domain.valueObject.CustomerType;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderEntity {
+public class OrderJpaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +43,5 @@ public class OrderEntity {
     private BigDecimal total;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<OrderItemEntity> items = new ArrayList<>();
+    private List<OrderItemJpaEntity> items = new ArrayList<>();
 }

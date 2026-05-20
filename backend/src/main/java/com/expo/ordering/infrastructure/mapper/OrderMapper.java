@@ -1,15 +1,16 @@
-package com.expo.ddd.infrastructure.persistence.mapper;
+package com.expo.ordering.infrastructure.mapper;
 
-import com.expo.ddd.domain.model.order.CustomerType;
-import com.expo.ddd.domain.model.order.Order;
-import com.expo.ddd.domain.model.order.OrderItem;
-import com.expo.ddd.domain.model.product.Product;
-import com.expo.ddd.domain.valueobject.CustomerId;
-import com.expo.ddd.domain.valueobject.OrderId;
-import com.expo.ddd.domain.valueobject.Quantity;
-import com.expo.ddd.infrastructure.persistence.entity.OrderEntity;
-import com.expo.ddd.infrastructure.persistence.entity.OrderItemEntity;
-import com.expo.ddd.infrastructure.persistence.entity.ProductEntity;
+import com.expo.catalog.domain.model.product.Product;
+import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
+import com.expo.catalog.infrastructure.mapper.ProductMapper;
+import com.expo.ordering.domain.model.order.Order;
+import com.expo.ordering.domain.model.order.OrderId;
+import com.expo.ordering.domain.model.order.OrderItem;
+import com.expo.ordering.domain.model.shared.Quantity;
+import com.expo.ordering.domain.valueObject.CustomerId;
+import com.expo.ordering.domain.valueObject.CustomerType;
+import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderJpaEntity;
+import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderItemJpaEntity;
 
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ import java.util.UUID;
  */
 public class OrderMapper {
 
-    public static Order toDomain(OrderEntity entity) {
+    public static Order toDomain(OrderJpaEntity entity) {
         Order order = Order.reconstitute(
                 OrderId.of(UUID.randomUUID()),
                 CustomerId.of(entity.getCustomerId()),
@@ -30,21 +31,21 @@ public class OrderMapper {
         return order;
     }
 
-    public static OrderEntity toEntity(Order order) {
-        OrderEntity entity = buildOrderEntity(order);
+    public static OrderJpaEntity toEntity(Order order) {
+        OrderJpaEntity entity = buildOrderEntity(order);
         addItemEntitiesToOrder(entity, order);
         return entity;
     }
 
-    private static void reconstructItemsFromEntity(Order order, OrderEntity entity) {
-        for (OrderItemEntity itemEntity : entity.getItems()) {
+    private static void reconstructItemsFromEntity(Order order, OrderJpaEntity entity) {
+        for (OrderItemJpaEntity itemEntity : entity.getItems()) {
             Product product = ProductMapper.toDomain(itemEntity.getProduct());
             order.reconstitueItem(product, Quantity.of(itemEntity.getQuantity()));
         }
     }
 
-    private static OrderEntity buildOrderEntity(Order order) {
-        OrderEntity entity = new OrderEntity();
+    private static OrderJpaEntity buildOrderEntity(Order order) {
+        OrderJpaEntity entity = new OrderJpaEntity();
         entity.setCustomerId(order.getCustomerId().getValue());
         entity.setCustomerType(order.getCustomerType());
         entity.setStatus(order.getStatus());
@@ -52,15 +53,15 @@ public class OrderMapper {
         return entity;
     }
 
-    private static void addItemEntitiesToOrder(OrderEntity entity, Order order) {
+    private static void addItemEntitiesToOrder(OrderJpaEntity entity, Order order) {
         for (OrderItem item : order.getItems()) {
-            OrderItemEntity itemEntity = buildOrderItemEntity(item, entity);
+            OrderItemJpaEntity itemEntity = buildOrderItemEntity(item, entity);
             entity.getItems().add(itemEntity);
         }
     }
 
-    private static OrderItemEntity buildOrderItemEntity(OrderItem item, OrderEntity orderEntity) {
-        OrderItemEntity itemEntity = new OrderItemEntity();
+    private static OrderItemJpaEntity buildOrderItemEntity(OrderItem item, OrderJpaEntity orderEntity) {
+        OrderItemJpaEntity itemEntity = new OrderItemJpaEntity();
         itemEntity.setOrder(orderEntity);
         itemEntity.setProduct(buildProductEntityReference(item));
         itemEntity.setQuantity(item.getQuantity().getValue());
@@ -68,8 +69,8 @@ public class OrderMapper {
         return itemEntity;
     }
 
-    private static ProductEntity buildProductEntityReference(OrderItem item) {
-        ProductEntity productEntity = new ProductEntity();
+    private static ProductJpaEntity buildProductEntityReference(OrderItem item) {
+        ProductJpaEntity productEntity = new ProductJpaEntity();
         productEntity.setId(item.getProduct().getId().getValue());
         productEntity.setName(item.getProduct().getName());
         productEntity.setUnitPrice(item.getProduct().getUnitPrice().getAmount());
