@@ -1,4 +1,4 @@
-package com.expo.ordering.domain.valueObject;
+package com.expo.ordering.domain.valueobject;
 
 /**
  * ✅ Enum de dominio que clasifica a los clientes según sus privilegios de compra.

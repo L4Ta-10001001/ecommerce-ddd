@@ -1,4 +1,4 @@
-package com.expo.ddd.infrastructure.config;
+package com.expo.config;
 
 import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
 import com.expo.catalog.infrastructure.adapters.out.persistence.jpa.SpringDataProductRepository;

@@ -7,8 +7,8 @@ import com.expo.ordering.domain.model.order.Order;
 import com.expo.ordering.domain.model.order.OrderId;
 import com.expo.ordering.domain.model.order.OrderItem;
 import com.expo.ordering.domain.model.shared.Quantity;
-import com.expo.ordering.domain.valueObject.CustomerId;
-import com.expo.ordering.domain.valueObject.CustomerType;
+import com.expo.ordering.domain.valueobject.CustomerId;
+import com.expo.ordering.domain.valueobject.CustomerType;
 import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderJpaEntity;
 import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderItemJpaEntity;
 

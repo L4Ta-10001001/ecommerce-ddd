@@ -1,9 +1,9 @@
 package com.expo.ordering.application.command;
 
-import com.expo.ordering.domain.valueObject.CustomerType;
-
 import java.util.List;
 import java.util.UUID;
+
+import com.expo.ordering.domain.valueobject.CustomerType;
 
 /**
  * ✅ Command object que transporta la intención del usuario al caso de uso.

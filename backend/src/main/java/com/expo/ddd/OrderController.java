@@ -1,4 +1,4 @@
-package com.expo.ddd.api;
+package com.expo.ddd;
 
 import com.expo.ordering.application.command.OrderItemCommand;
 import com.expo.ordering.application.command.PlaceOrderCommand;
@@ -7,7 +7,7 @@ import com.expo.ordering.application.port.in.PlaceOrderUseCase;
 import com.expo.ordering.domain.exception.OrderNotFoundException;
 import com.expo.ordering.domain.model.order.Order;
 import com.expo.ordering.domain.repository.OrderRepository;
-import com.expo.ordering.domain.valueObject.CustomerType;
+import com.expo.ordering.domain.valueobject.CustomerType;
 import com.expo.ordering.infrastructure.adapters.in.api.request.PlaceOrderRequest;
 import com.expo.ordering.infrastructure.adapters.in.api.response.OrderResponse;
 

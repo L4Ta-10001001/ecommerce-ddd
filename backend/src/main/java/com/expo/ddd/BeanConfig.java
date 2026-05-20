@@ -1,4 +1,4 @@
-package com.expo.ddd.infrastructure.config;
+package com.expo.ddd;
 
 import com.expo.catalog.domain.repository.ProductRepository;
 import com.expo.catalog.infrastructure.adapters.out.persistence.adapter.ProductRepositoryAdapter;

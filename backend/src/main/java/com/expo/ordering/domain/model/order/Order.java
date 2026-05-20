@@ -4,8 +4,8 @@ import com.expo.catalog.domain.model.product.Product;
 import com.expo.catalog.domain.model.shared.Money;
 import com.expo.ordering.domain.exception.InsufficientStockException;
 import com.expo.ordering.domain.model.shared.Quantity;
-import com.expo.ordering.domain.valueObject.CustomerId;
-import com.expo.ordering.domain.valueObject.CustomerType;
+import com.expo.ordering.domain.valueobject.CustomerId;
+import com.expo.ordering.domain.valueobject.CustomerType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

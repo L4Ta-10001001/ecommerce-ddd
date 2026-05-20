@@ -1,7 +1,7 @@
 package com.expo.ordering.infrastructure.adapters.out.persistence.entity;
 
 import com.expo.ordering.domain.model.order.OrderStatus;
-import com.expo.ordering.domain.valueObject.CustomerType;
+import com.expo.ordering.domain.valueobject.CustomerType;
 
 import jakarta.persistence.*;
 import lombok.Getter;

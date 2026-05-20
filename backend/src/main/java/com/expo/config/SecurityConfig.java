@@ -1,4 +1,4 @@
-package com.expo.ddd.infrastructure.config;
+package com.expo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
