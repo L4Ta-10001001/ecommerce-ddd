@@ -31,9 +31,9 @@ public record OrderResponse(
         List<OrderItemResponse> itemResponses = buildItemResponses(order.getItems());
         return new OrderResponse(
                 order.getId().toString(),
-                order.getCustomerId().toString(),
+                order.getCustomerId().value().toString(),
                 order.getStatus(),
-                order.getTotal().getAmount(),
+                order.getTotal().amount(),
                 itemResponses
         );
     }
@@ -46,10 +46,10 @@ public record OrderResponse(
 
     private static OrderItemResponse toItemResponse(OrderItem item) {
         return new OrderItemResponse(
-                item.getProduct().getId().toString(),
-                item.getProduct().getName(),
+                item.getProduct().productId().toString(),
+                item.getProduct().productName(),
                 item.getQuantity().getValue(),
-                item.getSubtotal().getAmount()
+                item.getSubtotal().amount()
         );
     }
 }
