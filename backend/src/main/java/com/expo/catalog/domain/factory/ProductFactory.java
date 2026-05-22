@@ -7,8 +7,8 @@ import com.expo.catalog.domain.model.product.Product;
 import com.expo.catalog.domain.model.product.ProductDescription;
 import com.expo.catalog.domain.model.product.ProductName;
 import com.expo.catalog.domain.model.product.Stock;
-import com.expo.catalog.domain.model.shared.Currency;
-import com.expo.catalog.domain.model.shared.Money;
+import com.expo.shared.domain.Currency;
+import com.expo.shared.domain.Money;
 import com.expo.catalog.domain.model.product.ProductId;
 
 

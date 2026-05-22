@@ -2,6 +2,8 @@ package com.expo.catalog.domain.event;
 
 import java.time.LocalDateTime;
 
+import com.expo.shared.domain.event.DomainEvent;
+
 public final class StockReplenished implements DomainEvent {
 
     private final String productId;

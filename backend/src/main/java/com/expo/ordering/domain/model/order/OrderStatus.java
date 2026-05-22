@@ -5,6 +5,7 @@ package com.expo.ordering.domain.model.order;
  */
 public enum OrderStatus {
     PENDING,
+    PLACED,
     CONFIRMED,
     CANCELLED
 }

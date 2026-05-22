@@ -6,9 +6,9 @@ import com.expo.catalog.application.port.out.DomainEventPublisher;
 import com.expo.catalog.domain.exception.ProductNotFoundException;
 import com.expo.catalog.domain.model.product.Product;
 import com.expo.catalog.domain.model.product.ProductId;
-import com.expo.catalog.domain.model.shared.Currency;
 import com.expo.catalog.domain.repository.ProductRepository;
-import com.expo.catalog.domain.model.shared.Money;
+import com.expo.shared.domain.Currency;
+import com.expo.shared.domain.Money;
 
 public class ChangeProductPriceService implements ChangeProductPriceUseCase {
 

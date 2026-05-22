@@ -1,13 +1,17 @@
 package com.expo.ordering.domain.model.order;
 
-import com.expo.catalog.domain.model.product.Product;
-import com.expo.catalog.domain.model.shared.Money;
-import com.expo.ordering.domain.exception.InsufficientStockException;
-import com.expo.ordering.domain.model.shared.Quantity;
+import com.expo.ordering.domain.event.OrderCancelled;
+import com.expo.ordering.domain.event.OrderConfirmed;
+import com.expo.ordering.domain.event.OrderPlaced;
+import com.expo.ordering.domain.exception.DomainException;
+import com.expo.ordering.domain.exception.InvalidOrderStateException;
 import com.expo.ordering.domain.valueobject.CustomerId;
 import com.expo.ordering.domain.valueobject.CustomerType;
+import com.expo.shared.domain.Currency;
+import com.expo.shared.domain.Money;
+import com.expo.shared.domain.Quantity;
+import com.expo.shared.domain.event.DomainEvent;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,25 +28,35 @@ public class Order {
     private final CustomerType customerType;
     private OrderStatus status;
     private Money total;
-    private final List<OrderItem> items;
+    private final List<OrderItem> items = new ArrayList<>();
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
 
     public Order(OrderId id, CustomerId customerId, CustomerType customerType) {
+        if (id == null) throw new IllegalArgumentException("Order id is required.");
+        if (customerId == null) throw new IllegalArgumentException("Customer id is required.");
+        if (customerType == null) throw new IllegalArgumentException("Customer type is required.");
+
         this.id = id;
         this.customerId = customerId;
         this.customerType = customerType;
         this.status = OrderStatus.PENDING;
-        this.total = new Money(BigDecimal.ZERO);
-        this.items = new ArrayList<>();
+        this.total = Money.zero(new Currency("USD"));
     }
 
-    /**
-     * ✅ Factory method para reconstituir un agregado desde persistencia.
-     *    Separado del constructor público para dejar claro que no es creación nueva.
-     */
-    public static Order reconstitute(OrderId id, CustomerId customerId,
-                                     CustomerType customerType, OrderStatus status) {
+    public static Order reconstitute(
+            OrderId id,
+            CustomerId customerId,
+            CustomerType customerType,
+            OrderStatus status,
+            Money total,
+            List<OrderItem> items
+    ) {
         Order order = new Order(id, customerId, customerType);
+
         order.status = status;
+        order.total = total;
+        order.items.addAll(items);
+
         return order;
     }
 
@@ -50,33 +64,84 @@ public class Order {
     // En el Proyecto A (N-Capas / modelo anémico) este cambio habría
     // requerido modificar OrderService mezclando lógica de negocio
     // con código de persistencia. Aquí solo cambia el agregado.
-    public void addItem(Product product, Quantity quantity) {
-        if (isRegularCustomer()) {
-            validateStock(product, quantity);
-        }
-        applyStockReduction(product, quantity);
-        items.add(new OrderItem(product, quantity));
-        recalculateTotal();
-    }
-
-    /**
-     * ✅ Usado exclusivamente para reconstituir una Order desde persistencia.
-     *    No valida ni modifica el stock (ya fue modificado cuando se creó la orden original).
-     */
-    public void reconstitueItem(Product product, Quantity quantity) {
+    public void addItem(ProductSnapshot product, Quantity quantity) {
+        validateNotClosed();
         items.add(new OrderItem(product, quantity));
         recalculateTotal();
     }
 
     public void confirm() {
+        if (status != OrderStatus.PLACED) {
+            throw new InvalidOrderStateException("Only placed orders can be confirmed.");
+        }
+
         this.status = OrderStatus.CONFIRMED;
+        domainEvents.add(new OrderConfirmed(id.value().toString()));
     }
 
     // ✅ La cancelación restaura el stock — responsabilidad del agregado, no de un Service
     public void cancel() {
-        validateNotAlreadyCancelled();
-        restoreAllItemsStock();
+        if (status == OrderStatus.CANCELLED) throw new InvalidOrderStateException("Order already cancelled.");
+
         this.status = OrderStatus.CANCELLED;
+        
+        domainEvents.add(
+            new OrderCancelled(this.id, this.toSnapshots())
+        );
+    }
+
+    public void place() {
+        validateCanBePlaced();
+
+        if (items.isEmpty()) {
+            throw new DomainException("Order must have at least one item");
+        }
+
+        this.status = OrderStatus.PLACED;
+
+        domainEvents.add(new OrderPlaced(id, customerId, total));
+    }
+
+    private void recalculateTotal() {
+        Money runningTotal = Money.zero(items.get(0).getSubtotal().currency());
+
+        for (OrderItem item : items) {
+            runningTotal = runningTotal.add(item.getSubtotal());
+        }
+
+        this.total = runningTotal;
+    }
+
+    private void validateCanBePlaced() {
+        if (status != OrderStatus.PENDING) {
+            throw new InvalidOrderStateException("Only draft orders can be placed.");
+        }
+    }
+
+    private void validateNotClosed() {
+        if (status == OrderStatus.CONFIRMED || status == OrderStatus.CANCELLED) {
+            throw new InvalidOrderStateException("Order is already closed.");
+        }
+    }
+
+    private List<OrderItemSnapshot> toSnapshots() {
+        return items.stream()
+                .map(item -> new OrderItemSnapshot(
+                        item.getProduct().productId(),     
+                        item.getProduct().productName(), 
+                        item.getQuantity().getValue(),    
+                        item.getProduct().unitPrice()   
+                ))
+                .toList();
+    }
+
+    /**
+     * Extrae y limpia los eventos acumulados.
+     */
+    public List<DomainEvent> pullDomainEvents() {
+        List<DomainEvent> events = new ArrayList<>(domainEvents);
+        domainEvents.clear();
+        return events;
     }
 
     public OrderId getId() {
@@ -101,43 +166,5 @@ public class Order {
 
     public List<OrderItem> getItems() {
         return Collections.unmodifiableList(items);
-    }
-
-    private boolean isRegularCustomer() {
-        return this.customerType == CustomerType.REGULAR;
-    }
-
-    private void applyStockReduction(Product product, Quantity quantity) {
-        if (isRegularCustomer()) {
-            product.decrementStock(quantity);
-        } else {
-            product.reserveStockForVip(quantity);
-        }
-    }
-
-    private void validateStock(Product product, Quantity quantity) {
-        if (!product.hasStock(quantity)) {
-            throw new InsufficientStockException(product.getName());
-        }
-    }
-
-    private void recalculateTotal() {
-        Money runningTotal = new Money(BigDecimal.ZERO);
-        for (OrderItem item : items) {
-            runningTotal = runningTotal.add(item.getSubtotal());
-        }
-        this.total = runningTotal;
-    }
-
-    private void restoreAllItemsStock() {
-        for (OrderItem item : items) {
-            item.getProduct().restoreStock(item.getQuantity());
-        }
-    }
-
-    private void validateNotAlreadyCancelled() {
-        if (this.status == OrderStatus.CANCELLED) {
-            throw new IllegalStateException("Order is already cancelled");
-        }
     }
 }

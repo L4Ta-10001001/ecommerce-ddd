@@ -6,9 +6,9 @@ import com.expo.catalog.domain.model.product.ProductId;
 import com.expo.catalog.domain.model.product.ProductName;
 import com.expo.catalog.domain.model.product.ProductStatus;
 import com.expo.catalog.domain.model.product.Stock;
-import com.expo.catalog.domain.model.shared.Currency;
-import com.expo.catalog.domain.model.shared.Money;
 import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
+import com.expo.shared.domain.Currency;
+import com.expo.shared.domain.Money;
 
 /**
  * ✅ Mapper responsable de convertir entre el dominio y la infraestructura JPA.

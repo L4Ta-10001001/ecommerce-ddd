@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-
-import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
+import java.util.UUID;
 
 /**
  * 🔌 Entidad JPA que representa un ítem de una orden en base de datos.
@@ -20,16 +19,21 @@ import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJp
 public class OrderItemJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private OrderJpaEntity order;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductJpaEntity product;
+    // SNAPSHOT (NO relación)
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
+
+    @Column(nullable = false)
+    private String productName;
+
+    @Column(nullable = false, precision = 12, scale = 2)
+    private BigDecimal unitPrice;
 
     @Column(nullable = false)
     private int quantity;

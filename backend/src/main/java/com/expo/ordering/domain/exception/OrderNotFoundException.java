@@ -5,7 +5,7 @@ package com.expo.ordering.domain.exception;
  */
 public class OrderNotFoundException extends RuntimeException {
 
-    public OrderNotFoundException(Object orderId) {
+    public OrderNotFoundException(String orderId) {
         super("Order not found with id: " + orderId);
     }
 }

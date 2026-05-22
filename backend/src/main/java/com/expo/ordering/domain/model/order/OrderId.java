@@ -1,37 +1,28 @@
 package com.expo.ordering.domain.model.order;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /**
  * ✅ Typed ID wrapper para Order. Previene mezclar IDs de distintos agregados.
  */
-public final class OrderId {
+public record OrderId(UUID value) {
 
-    private final UUID value;
-
-    private OrderId(UUID value) {
-        this.value = Objects.requireNonNull(value, "OrderId cannot be null");
+    public OrderId {
+        if (value == null) {
+            throw new IllegalArgumentException("Order id cannot be null");
+        }
     }
 
-    public static OrderId of(UUID value) {
-        return new OrderId(value);
+    public static OrderId newId() {
+        return new OrderId(UUID.randomUUID());
     }
 
-    public UUID getValue() {
-        return value;
-    }
+    public static OrderId from(String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Order id cannot be null or empty");
+        }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (!(other instanceof OrderId orderId)) return false;
-        return Objects.equals(value, orderId.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(value);
+        return new OrderId(UUID.fromString(value));
     }
 
     @Override

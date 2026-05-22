@@ -1,17 +1,18 @@
 package com.expo.ordering.infrastructure.mapper;
 
-import com.expo.catalog.domain.model.product.Product;
-import com.expo.catalog.infrastructure.adapters.out.persistence.entity.ProductJpaEntity;
-import com.expo.catalog.infrastructure.mapper.ProductMapper;
 import com.expo.ordering.domain.model.order.Order;
 import com.expo.ordering.domain.model.order.OrderId;
 import com.expo.ordering.domain.model.order.OrderItem;
-import com.expo.ordering.domain.model.shared.Quantity;
+import com.expo.ordering.domain.model.order.ProductSnapshot;
 import com.expo.ordering.domain.valueobject.CustomerId;
-import com.expo.ordering.domain.valueobject.CustomerType;
 import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderJpaEntity;
+import com.expo.shared.domain.Currency;
+import com.expo.shared.domain.Money;
+import com.expo.shared.domain.Quantity;
 import com.expo.ordering.infrastructure.adapters.out.persistence.entity.OrderItemJpaEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,64 +22,71 @@ import java.util.UUID;
 public class OrderMapper {
 
     public static Order toDomain(OrderJpaEntity entity) {
-        Order order = Order.reconstitute(
-                OrderId.of(UUID.randomUUID()),
-                CustomerId.of(entity.getCustomerId()),
+        List<OrderItem> items = entity.getItems().stream()
+            .map(itemEntity -> {
+
+                ProductSnapshot snapshot = new ProductSnapshot(
+                    itemEntity.getProductId().toString(),
+                    itemEntity.getProductName().toString(),
+                    new Money(
+                        itemEntity.getUnitPrice(),
+                        new Currency("USD"))
+                );
+
+                return new OrderItem(
+                    snapshot,
+                    new Quantity(itemEntity.getQuantity())
+                );
+
+            })
+            .toList();
+
+        return Order.reconstitute(
+                new OrderId(entity.getId()),
+                new CustomerId(entity.getCustomerId()),
                 entity.getCustomerType(),
-                entity.getStatus()
+                entity.getStatus(),
+                new Money(entity.getTotal(), new Currency("USD")),
+                items
         );
-        reconstructItemsFromEntity(order, entity);
-        return order;
     }
 
     public static OrderJpaEntity toEntity(Order order) {
-        OrderJpaEntity entity = buildOrderEntity(order);
-        addItemEntitiesToOrder(entity, order);
-        return entity;
-    }
-
-    private static void reconstructItemsFromEntity(Order order, OrderJpaEntity entity) {
-        for (OrderItemJpaEntity itemEntity : entity.getItems()) {
-            Product product = ProductMapper.toDomain(itemEntity.getProduct());
-            order.reconstitueItem(product, Quantity.of(itemEntity.getQuantity()));
-        }
-    }
-
-    private static OrderJpaEntity buildOrderEntity(Order order) {
         OrderJpaEntity entity = new OrderJpaEntity();
-        entity.setCustomerId(order.getCustomerId().getValue());
+
+        entity.setId(order.getId().value());
+
+        entity.setCustomerId(order.getCustomerId().value());
         entity.setCustomerType(order.getCustomerType());
         entity.setStatus(order.getStatus());
-        entity.setTotal(order.getTotal().getAmount());
+        entity.setTotal(order.getTotal().amount());
+
+        entity.setItems(new ArrayList<>());
+
+        addItemEntitiesToOrder(entity, order);
+
         return entity;
     }
 
     private static void addItemEntitiesToOrder(OrderJpaEntity entity, Order order) {
         for (OrderItem item : order.getItems()) {
-            OrderItemJpaEntity itemEntity = buildOrderItemEntity(item, entity);
-            entity.getItems().add(itemEntity);
+            entity.getItems().add(buildOrderItemEntity(item, entity));
         }
     }
 
     private static OrderItemJpaEntity buildOrderItemEntity(OrderItem item, OrderJpaEntity orderEntity) {
         OrderItemJpaEntity itemEntity = new OrderItemJpaEntity();
+
         itemEntity.setOrder(orderEntity);
-        itemEntity.setProduct(buildProductEntityReference(item));
+        itemEntity.setId(UUID.randomUUID());
+        itemEntity.setProductId(UUID.fromString(item.getProduct().productId()));
+        itemEntity.setProductName(item.getProduct().productName());
+        itemEntity.setUnitPrice(item.getProduct().unitPrice().amount());
         itemEntity.setQuantity(item.getQuantity().getValue());
-        itemEntity.setSubtotal(item.getSubtotal().getAmount());
+        itemEntity.setSubtotal(item.getSubtotal().amount());
+
         return itemEntity;
     }
 
-    private static ProductJpaEntity buildProductEntityReference(OrderItem item) {
-        ProductJpaEntity productEntity = new ProductJpaEntity();
-        productEntity.setId(item.getProduct().getId().getValue());
-        productEntity.setName(item.getProduct().getName());
-        productEntity.setUnitPrice(item.getProduct().getUnitPrice().getAmount());
-        productEntity.setStock(item.getProduct().getStock().getValue());
-        return productEntity;
-    }
-
-    private OrderMapper() {
-        // Utility class — no instantiation
-    }
+    private OrderMapper() {}
 }

@@ -1,12 +1,12 @@
 package com.expo.catalog.domain.model.product;
 
-import com.expo.catalog.domain.event.DomainEvent;
 import com.expo.catalog.domain.event.StockReleased;
 import com.expo.catalog.domain.event.StockReplenished;
 import com.expo.catalog.domain.event.StockReserved;
 import com.expo.catalog.domain.exception.InsufficientStockException;
 import com.expo.catalog.domain.exception.InvalidStockQuantityException;
 import com.expo.catalog.domain.exception.ProductInactiveException;
+import com.expo.shared.domain.event.DomainEvent;
 
 import java.util.List;
 public class Stock {

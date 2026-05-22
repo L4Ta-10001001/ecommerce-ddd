@@ -6,6 +6,7 @@ import com.expo.catalog.domain.exception.ProductNotFoundException;
 import com.expo.catalog.domain.model.product.Product;
 import com.expo.catalog.domain.model.product.ProductId;
 import com.expo.catalog.domain.repository.ProductRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 public class ReserveStockService implements ReserveStockUseCase {
 
@@ -21,6 +22,7 @@ public class ReserveStockService implements ReserveStockUseCase {
     }
 
     @Override
+    @Transactional
     public void reserve(String productId, int quantity) {
         Product product = productRepository.findById(ProductId.from(productId)
             ).orElseThrow(() -> new ProductNotFoundException(productId));

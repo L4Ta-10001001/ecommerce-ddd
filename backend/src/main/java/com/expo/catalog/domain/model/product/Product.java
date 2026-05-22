@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.expo.catalog.domain.event.DomainEvent;
 import com.expo.catalog.domain.event.ProductActivated;
 import com.expo.catalog.domain.event.ProductCreated;
 import com.expo.catalog.domain.event.ProductDeactivated;
 import com.expo.catalog.domain.event.ProductPriceChanged;
 import com.expo.catalog.domain.exception.InvalidProductPriceException;
 import com.expo.catalog.domain.exception.ProductInactiveException;
-import com.expo.catalog.domain.model.shared.Money;
+import com.expo.shared.domain.Money;
+import com.expo.shared.domain.event.DomainEvent;
 
 /**
  * ✅ Aggregate Root del producto. Encapsula las reglas de stock.
