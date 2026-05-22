@@ -5,7 +5,6 @@ export const AUTH_HEADERS = {
 }
 
 export const DEFAULT_CUSTOMER_ID = '7e9d5c4a-8d5f-4c5d-9d5b-12b2a7f7a111'
-export const DEFAULT_BACKEND_ORDER_ID = 1
 
 export const CUSTOMER_TYPES = {
   REGULAR: 'REGULAR',
@@ -40,7 +39,6 @@ export const LABELS = {
   orderHistoryEmpty: 'No orders yet. Submit one to see it here.',
   orderHistorySession: 'session only',
   orderIdLabel: 'Order ID',
-  orderBackendIdLabel: 'DB ID',
   orderItemLabel: 'Item',
   orderTotalLabel: 'Total',
   orderCancel: 'Cancel',
@@ -53,16 +51,15 @@ export const LABELS = {
   apiResponseEmpty: 'No response yet.',
   apiResponseHide: 'Hide',
   apiResponseShow: 'Show',
-  backendStatusUnknown: 'Unknown',
   errorUnknown: 'Unknown error',
 }
 
 export const SEED_PRODUCTS = [
   // seed data — loaded by DataSeeder.java on backend startup
-  { id: 1, name: 'Laptop', price: 1200.0, stock: 10, maxStock: 10 },
-  { id: 2, name: 'Mouse', price: 25.0, stock: 50, maxStock: 50 },
-  { id: 3, name: 'Keyboard', price: 75.0, stock: 30, maxStock: 30 },
-  { id: 4, name: 'Monitor', price: 350.0, stock: 5, maxStock: 5 },
+  { id: '11111111-1111-1111-1111-111111111111', name: 'Laptop', price: 1200.0, stock: 10, maxStock: 10 },
+  { id: '22222222-2222-2222-2222-222222222222', name: 'Mouse', price: 25.0, stock: 50, maxStock: 50 },
+  { id: '33333333-3333-3333-3333-333333333333', name: 'Keyboard', price: 75.0, stock: 30, maxStock: 30 },
+  { id: '44444444-4444-4444-4444-444444444444', name: 'Monitor', price: 350.0, stock: 5, maxStock: 5 },
 ]
 
 export const CLIENT_ACCOUNTS = [

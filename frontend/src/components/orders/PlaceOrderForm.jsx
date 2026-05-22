@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { CLIENT_ACCOUNTS, CUSTOMER_TYPES, DEFAULT_CUSTOMER_ID, LABELS } from '../../constants'
 
 const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
-  const [productId, setProductId] = useState(products[0]?.id ?? 1)
+  const [productId, setProductId] = useState(products[0]?.id ?? '')
   const [quantity, setQuantity] = useState(1)
   const [customerId, setCustomerId] = useState(DEFAULT_CUSTOMER_ID)
   const [customerType, setCustomerType] = useState(CUSTOMER_TYPES.REGULAR)
@@ -18,7 +18,7 @@ const PlaceOrderForm = ({ products, onSubmit, isSubmitting }) => {
   const submitForm = (event) => {
     event.preventDefault()
     onSubmit({
-      productId: Number(productId),
+      productId,
       quantity: Number(quantity),
       customerId,
       customerType,

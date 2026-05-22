@@ -24,7 +24,6 @@ const Dashboard = () => {
     orderHistory,
     submitOrder,
     cancelExistingOrder,
-    backendOrderIdMap,
   } = useOrders()
 
   const handlePlaceOrder = async ({ productId, quantity, customerId, customerType }) => {
@@ -41,8 +40,7 @@ const Dashboard = () => {
       return
     }
 
-    const parsedProductId = Number(item.productId)
-    restoreStock(Number.isNaN(parsedProductId) ? item.productId : parsedProductId, item.quantity)
+    restoreStock(item.productId, item.quantity)
   }
 
   const orderProductName = (order) => {
@@ -50,12 +48,11 @@ const Dashboard = () => {
     if (!productId) {
       return 'Unknown'
     }
-    return productLookup[Number(productId)]?.name ?? 'Unknown'
+    return productLookup[productId]?.name ?? 'Unknown'
   }
 
   const normalizedHistory = orderHistory.map((order) => ({
     ...order,
-    backendOrderId: backendOrderIdMap.get(order.orderId),
     items: order.items?.map((item) => ({
       ...item,
       productName: item.productName ?? orderProductName(order),

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { cancelOrder, placeOrder } from '../api/ordersApi'
-import { CUSTOMER_TYPES, DEFAULT_BACKEND_ORDER_ID, DEFAULT_CUSTOMER_ID, LABELS } from '../constants'
+import { CUSTOMER_TYPES, DEFAULT_CUSTOMER_ID, LABELS } from '../constants'
 
 const buildErrorMessage = (error) => {
   const responseData = error?.response?.data
@@ -30,7 +30,6 @@ const useOrders = () => {
   const [lastError, setLastError] = useState(null)
   const [rawResponse, setRawResponse] = useState(null)
   const [orderHistory, setOrderHistory] = useState([])
-  const [backendOrderIdMap, setBackendOrderIdMap] = useState(new Map())
 
   const buildOrderPayload = ({ customerId, customerType, productId, quantity }) => ({
     customerId,
@@ -56,12 +55,6 @@ const useOrders = () => {
       })
 
       const response = await placeOrder(payload)
-      setBackendOrderIdMap((current) => {
-        const next = new Map(current)
-        const nextId = next.size + DEFAULT_BACKEND_ORDER_ID
-        next.set(response.orderId, nextId)
-        return next
-      })
       setLastOrder(response)
       setRawResponse(response)
       setOrderHistory((current) => [response, ...current])
@@ -79,8 +72,7 @@ const useOrders = () => {
   }
 
   const cancelExistingOrder = async (orderId) => {
-    const backendId = backendOrderIdMap.get(orderId) ?? DEFAULT_BACKEND_ORDER_ID
-    const response = await cancelOrder(backendId)
+    const response = await cancelOrder(orderId)
     setRawResponse(response)
     setOrderHistory((current) => current.map((order) => (
       order.orderId === orderId ? { ...response, orderId } : order
@@ -94,7 +86,6 @@ const useOrders = () => {
     lastError,
     rawResponse,
     orderHistory,
-    backendOrderIdMap,
     submitOrder,
     cancelExistingOrder,
   }
