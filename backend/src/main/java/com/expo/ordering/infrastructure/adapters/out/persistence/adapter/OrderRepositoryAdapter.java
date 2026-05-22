@@ -7,6 +7,7 @@ import com.expo.ordering.infrastructure.adapters.out.persistence.jpa.SpringDataO
 import com.expo.ordering.infrastructure.mapper.OrderMapper;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * 🔌 Adaptador de salida: implementa el puerto del dominio usando Spring Data JPA.
@@ -28,7 +29,7 @@ public class OrderRepositoryAdapter implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findById(Long id) {
+    public Optional<Order> findById(UUID id) {
         return jpaRepository.findById(id)
                 .map(OrderMapper::toDomain);
     }

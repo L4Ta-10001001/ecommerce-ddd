@@ -18,7 +18,7 @@ import com.expo.catalog.application.port.in.DeactivateProductUseCase;
 import com.expo.catalog.application.port.in.GetProductByIdUseCase;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private final CreateProductUseCase createProductUseCase;
@@ -60,10 +60,6 @@ public class ProductController {
     @PostMapping("/{id}/deactivate")
     public void deactivate(@PathVariable String id) {
         deactivateProductUseCase.deactivate(id);
-    }
-
-    public void changePrice(@RequestBody ChangeProductPriceCommand command) {
-        changeProductPriceUseCase.changePrice(command);
     }
 
     @PutMapping("/{id}/price")

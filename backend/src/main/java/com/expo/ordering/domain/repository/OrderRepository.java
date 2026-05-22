@@ -1,6 +1,7 @@
 package com.expo.ordering.domain.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import com.expo.ordering.domain.model.order.Order;
 
@@ -13,5 +14,5 @@ public interface OrderRepository {
 
     Order save(Order order);
 
-    Optional<Order> findById(Long id);
+    Optional<Order> findById(UUID id);
 }
