@@ -6,6 +6,3 @@ Thumbs.db
 .idea/
 .vscode/
 *.iml
-
-# Agents (OpenCode skills — local only)
-.agents/
